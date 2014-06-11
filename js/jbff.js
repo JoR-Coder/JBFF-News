@@ -1,7 +1,7 @@
 // The models
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
 
- Article = new Backbone.Model.extend({
+Article = new Backbone.Model.extend({
  	defaults:{
  		_id     : 0,
  		title   : "",
@@ -12,13 +12,8 @@
  		datePublished: "",
  		lastEdit: "",
  		comments: []
- 	},
-
- 	initialize: function(){
-
- 	}
-
- });
+	}
+});
 
 
 Articles = new Backbone.Collection.extend({
@@ -31,25 +26,26 @@ Articles = new Backbone.Collection.extend({
 // The views & controls
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
 
-var articlesView = Backbone.View.extend({
+ArticlesView = Backbone.View.extend({
+	tagName: "li",
+	className: "",
 
-  tagName: "li",
+	template: Handlebars.compile(),
 
-  className: "",
+	events: {
+		"click .icon":          "open",
+	},
 
-  events: {
-    "click .icon":          "open",
-    "click .button.edit":   "openEditDialog",
-    "click .button.delete": "destroy"
-  },
+	initialize: function() {
+		this.listenTo(this.model, "change", this.render);
+		this.render();
+	},
 
-  initialize: function() {
-    this.listenTo(this.model, "change", this.render);
-  },
-
-  render: function() {
-
-  }
+	render: function() {
+		if( this.collection !== undefined ){
+			this.$el.html( this.template( this.collection.toJSON() ) );
+		}
+	}
 
 });
 
@@ -60,3 +56,10 @@ var articlesView = Backbone.View.extend({
 // The everything else
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
 
+var articles = new Articles([
+	{ title: "En titel", text: "OCh så har vi lite text här :)" }
+]);
+
+var articlesView = new ArticlesView({ collection: articles});
+
+$("").html(articlesView.el);
