@@ -38,9 +38,8 @@ ArticlesView = Backbone.View.extend({
 	},
 
 	render: function() {
-		console.log("Här");
 		if( this.collection !== undefined ){
-			this.$el.html( this.template( this.collection.toJSON() ) );
+			this.$el.html( this.template( {articles: this.collection.toJSON()} ) );
 		}
 	}
 
