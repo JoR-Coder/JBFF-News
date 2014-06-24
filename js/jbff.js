@@ -12,7 +12,7 @@ Article = Backbone.Model.extend({
 	 		imageURL: "",
 	 		datePublished: "",
 	 		lastEdit: "",
-	 		comments: ["", ""]
+	 		comments: []
  		};
 	}
 });
@@ -36,7 +36,6 @@ ArticlesView = Backbone.View.extend({
 
 	initialize: function() {
 
-		this.listenTo(this.collection, "change add remove", this.render);
 		this.collection.on('add remove change',this.render,this);
 		this.render();
 	},
@@ -49,7 +48,9 @@ ArticlesView = Backbone.View.extend({
 
 });
 
+
 ArticleView = Backbone.View.extend({
+	el: $(".content"),
 	tagName: "div",
 //	className: "",
 
@@ -58,13 +59,19 @@ ArticleView = Backbone.View.extend({
 	events: {
 		"click button": "comment"
 	},
+	
 	comment:function(){
+
 		var myName = $('#commentName').val();
 		var myText = $('#commentText').val();
-		var comment = this.model.get('comments');
+		var comment = this.model.get('comments').slice(0);
+		
+		var d = new Date();
+		comment.push({name:myName, text:myText, timestamp:d.getDate().toString() });
 
-		comment.set({name:myName,text:myText});
-		this.model.push({comments:comment});
+		//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
+		this.model.set({sync: "sync"});
+		this.model.set({comments:comment});
 
 		$('#commentName').val("");
 		$('#commentText').val("");
@@ -77,11 +84,17 @@ ArticleView = Backbone.View.extend({
 
 	render: function() {
 		if( this.model !== undefined ){
+			
+			// Kod för att visa redigeringsknappar...
+			var editField = Handlebars.compile( $("#edit-article").html() );
+			$(".editfield").html( editField("dummy") );
+
 			this.$el.html(this.template(this.model.toJSON()));
 		}
 	}
 
 });
+
 
 AddArticleView = Backbone.View.extend({
 	tagName: "div",
@@ -92,7 +105,7 @@ AddArticleView = Backbone.View.extend({
 	},
 
 	render: function() {
-			this.$el.html(this.template());
+		this.$el.html(this.template());
 	},
 	events: {
 		"click button":"save",
@@ -119,19 +132,12 @@ Router = Backbone.Router.extend({
 		'add-article':'add'
 	},
 	start:function(){
-				//var article = new Article({title:"123",text:"333",comments:[{name:"fred",text:"hej"},{name:"fred2",text:"hej2"}]});
-
 		var articlesView = new ArticlesView({ collection: articles });
-		//articles.add(article);
 		$(".content").html(articlesView.el);
 	},
 	view:function(id){
 		var article = articles.get(id);
-
 		var articleView = new ArticleView({model:article});
-
-		articleView.render();
-		$(".content").html(articleView.el);
 
 	},
 	add:function(){
