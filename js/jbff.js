@@ -1,3 +1,29 @@
+// Extra functions...
+//
+
+Date.prototype.format = function(format){ //author: meizz
+
+	var o = {
+		"M+" : this.getMonth()+1, //month
+		"d+" : this.getDate(),    //day
+		"h+" : this.getHours(),   //hour
+		"m+" : this.getMinutes(), //minute
+		"s+" : this.getSeconds(), //second
+		"q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+		"S" : this.getMilliseconds() //millisecond
+	};
+
+	if(/(y+)/.test(format)) 
+		format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	for(var k in o)
+		if(new RegExp("("+ k +")").test(format))
+			format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+
+	return format;
+};
+
+
+
 // The models
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
 
@@ -41,6 +67,7 @@ ArticlesView = Backbone.View.extend({
 	},
 
 	render: function() {
+		$(".editfield").html("");
 		if( this.collection !== undefined ){
 			this.$el.html( this.template( {articles: this.collection.toJSON()} ) );
 		}
@@ -64,17 +91,25 @@ ArticleView = Backbone.View.extend({
 
 		var myName = $('#commentName').val();
 		var myText = $('#commentText').val();
-		var comment = this.model.get('comments').slice(0);
 		
-		var d = new Date();
-		comment.push({name:myName, text:myText, timestamp:d.getDate().toString() });
+		var nameWithoutSpace = myName.replace(/\s/g, '');
+		var textWithoutSpace = myText.replace(/\s/g, '');
 
-		//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
-		this.model.set({sync: "sync"});
-		this.model.set({comments:comment});
+		if(nameWithoutSpace == "" || textWithoutSpace == ""){
+				alert("Fill in all fields");
+		}else{
 
-		$('#commentName').val("");
-		$('#commentText').val("");
+			var comment = this.model.get('comments').slice(0);
+
+			comment.push({name:myName, text:myText, timestamp:new Date().format("dd/MM h:mm") });
+	
+			//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
+			this.model.set({sync: "sync"});
+			this.model.set({comments:comment});
+	
+			$('#commentName').val("");
+			$('#commentText').val("");
+		}		
 	},
 	initialize: function() {
 
@@ -87,7 +122,7 @@ ArticleView = Backbone.View.extend({
 			
 			// Kod för att visa redigeringsknappar...
 			var editField = Handlebars.compile( $("#edit-article").html() );
-			$(".editfield").html( editField("dummy") );
+			$(".editfield").html( editField() );
 
 			this.$el.html(this.template(this.model.toJSON()));
 		}
@@ -105,6 +140,7 @@ AddArticleView = Backbone.View.extend({
 	},
 
 	render: function() {
+		$(".editfield").html("");
 		this.$el.html(this.template());
 	},
 	events: {
