@@ -5,14 +5,14 @@ Article = Backbone.Model.extend({
  	defaults:function(){
 
  		return{ 
- 		title   : "",
- 		text    : "",
- 		author  : "",
- 		category: "",
- 		imageURL: "",
- 		datePublished: "",
- 		lastEdit: "",
- 		comments: ["", ""]
+	 		title   : "",
+	 		text    : "",
+	 		author  : "",
+	 		category: "",
+	 		imageURL: "",
+	 		datePublished: "",
+	 		lastEdit: "",
+	 		comments: ["", ""]
  		};
 	}
 });
@@ -36,7 +36,7 @@ ArticlesView = Backbone.View.extend({
 
 	initialize: function() {
 
-		this.listenTo(this.collection, "change", this.render);
+		this.listenTo(this.collection, "change add remove", this.render);
 		this.collection.on('add remove change',this.render,this);
 		this.render();
 	},
@@ -62,9 +62,10 @@ ArticleView = Backbone.View.extend({
 		var myName = $('#commentName').val();
 		var myText = $('#commentText').val();
 		var comment = this.model.get('comments');
-		comment.push({name:myName,text:myText});
-		this.model.set({author:"ddd"});
-		this.model.set({comments:comment});
+
+		comment.set({name:myName,text:myText});
+		this.model.push({comments:comment});
+
 		$('#commentName').val("");
 		$('#commentText').val("");
 	},
@@ -94,15 +95,15 @@ AddArticleView = Backbone.View.extend({
 			this.$el.html(this.template());
 	},
 	events: {
-	"click button":"save",
+		"click button":"save",
 	},
 	save:function(){
 		var myText = $('#text').val();
 		var myTitle = $('#title').val();
 		var article = new Article({title:myTitle,text:myText});
+
 		articles.add(article);
 		router.navigate('',{trigger:true});
-
 	}
 
 });
