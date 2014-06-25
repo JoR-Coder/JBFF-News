@@ -65,18 +65,15 @@ ArticlesView = Backbone.View.extend({
 
 	render: function() {
 
-		console.log("articles view render");
-
 		if(myRoute.routes[Backbone.history.fragment] == "start"){
 			$(".adminButtons").html("");
 		}
 
-		
+
 		if( this.collection !== undefined ){
 			this.$el.html( this.template( {articles: this.collection.toJSON()} ) );
 		}
 	}
-
 });
 
 
@@ -87,9 +84,16 @@ ArticleView = Backbone.View.extend({
 	template: Handlebars.compile( $("#article").html() ),
 
 	events: {
+
 		"click button": "comment"
 	},
+	initialize: function() {
+
+		this.model.on('add remove change',this.render,this);
+		this.render();
+	},
 	comment:function(){
+
 		var myName = $('#commentName').val();
 		var myText = $('#commentText').val();
 
@@ -97,39 +101,34 @@ ArticleView = Backbone.View.extend({
 		var textWithoutSpace = myText.replace(/\s/g, '');
 
 		if(nameWithoutSpace == "" || textWithoutSpace == ""){
-				alert("Fill in all fields");
+
+			alert("Fill in all fields");
 		}else{
-			
+
 			var comment = this.model.get('comments').slice(0);
+
 			comment.push({name:myName, text:myText, timestamp:new Date().format("dd/MM h:mm") });
 
-			this.model.set({sync: "sync"});//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
+			// this.model.set({sync: "sync"});//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
 			this.model.set({comments:comment});
+
 			$('#commentName').val("");
 			$('#commentText').val("");
 		}
 	},
-	initialize: function() {
-
-		this.model.on('add remove change',this.render,this);
-		this.render();
-	},
-
 	render: function() {
 		if( this.model !== undefined ){
-					console.log("article view render");
 
-			// Kod för att visa redigeringsknappar...
+			if(admin.get("loggedIn") === 1){
 
-			//if(admin){} kör koden under
-			var editField = Handlebars.compile( $("#edit-article").html());
+				var editField = Handlebars.compile( $("#edit-article").html());
 
-			$(".adminButtons").html( editField() );
+				$(".adminButtons").html( editField() );
+			}
 
 			this.$el.html(this.template(this.model.toJSON()));
 		}
 	}
-
 });
 
 
@@ -140,15 +139,12 @@ AddArticleView = Backbone.View.extend({
 
 		this.render();
 	},
-
-	render: function() {
-			this.$el.html(this.template());
-			$(".adminButtons").html("");
-	},
 	events: {
+
 		"click button":"save",
 	},
 	save:function(){
+
 		var myText = $('#text').val();
 		var myTitle = $('#title').val();
 		var myIntroductionText = $('#introductionText').val();
@@ -166,8 +162,71 @@ AddArticleView = Backbone.View.extend({
 		articles.add(article);
 		router.navigate('',{trigger:true});
 		}
+	},
+	render: function() {
+
+			this.$el.html(this.template());
+			$(".adminButtons").html("");
 	}
 });
+
+
+LoginView = Backbone.View.extend({
+	tagName: "div",
+	template: Handlebars.compile($("#login-template").html()),
+	initialize: function() {
+
+		this.render();
+	},
+
+	render: function() {
+
+		this.$el.html(this.template());
+			$("#wrongLoginMessage").html("");
+	},
+	events: {
+		"click button":"login",
+	},
+	login:function(){
+
+		var username = $('#usernameInput').val();
+		var password = $('#passwordInput').val();
+
+		if(username === admin.get("name") && password === admin.get("password")){
+
+			admin.set({loggedIn:1});
+			router.navigate('',{trigger:true});
+		}else{
+
+			$("#wrongLoginMessage").html("Fel uppgifter, försök igen!");
+		}
+	}
+});
+
+
+NavbarView = Backbone.View.extend({
+	tagName: "div",
+	template: Handlebars.compile($("#navbar-template-admin").html()),
+	initialize: function() {
+
+		this.render();
+	},
+
+	render: function() {
+
+		if(admin.get("loggedIn") === 1){
+
+			this.$el.html("");
+			this.$el.html(this.template());
+		}else{
+
+			this.$el.html("");
+			var notAdmin = Handlebars.compile($("#navbar-template-notAdmin").html());
+			this.$el.html(notAdmin());
+		}
+	}
+});
+
 
 
 var articles = new Articles();
@@ -176,29 +235,52 @@ Router = Backbone.Router.extend({
 
 	routes:{
 		'':'start',
-		'article/:id':'view',
-		'add-article':'add'
+		'article/:id': 'view',
+		'add-article': 'add',
+		'login'      : 'login',
+		'logOut'     : 'logOut'
 	},
 	start:function(){
 
+		var navbarView = new NavbarView();
 		var articlesView = new ArticlesView({ collection: articles });
+
+		articlesView.render();
+		navbarView.render();
+
+		$("#myNavbar").html(navbarView.el);
 		$(".content").html(articlesView.el);
 	},
 	view:function(id){
-		var article = articles.get(id);
 
+		var article = articles.get(id);
 		var articleView = new ArticleView({model:article});
 
 		articleView.render();
 		$(".content").html(articleView.el);
-
 	},
 	add:function(){
+
 		var addArticleView = new AddArticleView();
+
 		addArticleView.render();
 		$(".content").html(addArticleView.el);
+	},
+	login:function(){
+		var loginView = new LoginView();
+
+		loginView.render();
+		$(".content").html(loginView.el);
+	},
+	logOut:function(){
+		admin.set({loggedIn:0});
+		router.navigate('',{trigger:true});
 	}
 });
+
+var admin = new Admin();
+
+admin.get("loggedIn")
 
 var myRoute = window.router = new Router();
 
@@ -207,6 +289,3 @@ Backbone.history.start();
 
 // The everything else
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
-
-
-

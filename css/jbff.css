@@ -6,8 +6,11 @@ html {
 }
 
 body {
+  background: url("bild.gif") repeat-x;
+
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+ 
 }
 
 #footer {
@@ -16,9 +19,14 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #f5f5f5;
+  background-color: lightblue;
+
+
 }
 
+.navbar {
+  background-color: lightblue;
+}
 
 /* Custom page CSS
 -------------------------------------------------- */
@@ -26,17 +34,54 @@ body {
 
 body > .container {
   padding: 60px 15px 0;
+
+
 }
 
 .container .text-muted {
   margin: 20px 0;
+
 }
 
 #footer > .container {
   padding-right: 15px;
   padding-left: 15px;
+
 }
 
 code {
   font-size: 80%;
+
+}
+
+
+p {
+  color: #484848;
+}
+
+#jbff {
+   color: lightblue;
+   font-size: 25px;
+   text-shadow: 3px 2px black;
+}
+
+.navbar a{
+  color: #0099FF;
+  text-indent: 15px;
+
+}
+body a {
+  color: CC9966 ;
+}
+
+#introText {
+  font-family: inherit;
+}
+
+.navbar-nav li a:hover{
+  background-color: #5bc0de;
+}
+
+.icon-bar {
+  background-color: black;
 }
