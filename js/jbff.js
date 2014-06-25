@@ -3,21 +3,24 @@
 
 
 Date.prototype.format = function(format){ //author: meizz 
-var o = { "M+" : this.getMonth()+1, //month 
-"d+" : this.getDate(), //day 
-"h+" : this.getHours(), //hour
- "m+" : this.getMinutes(), //minute
-  "s+" : this.getSeconds(), //second 
-  "q+" : Math.floor((this.getMonth()+3)/3), //quarter
-   "S" : this.getMilliseconds() //millisecond
+	var o = { "M+" : this.getMonth()+1, //month 
+		"d+" : this.getDate(), //day 
+		"h+" : this.getHours(), //hour
+		"m+" : this.getMinutes(), //minute
+		"s+" : this.getSeconds(), //second 
+		"q+" : Math.floor((this.getMonth()+3)/3), //quarter
+		"S" : this.getMilliseconds() //millisecond
     }; 
-    if(/(y+)/.test(format)) 
-    	format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-    for(var k in o) if(new RegExp("("+ k +")").test(format)) 
-    	format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
-     return format;
 
-      };
+	if(/(y+)/.test(format)) 
+		format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+
+	for(var k in o) if(new RegExp("("+ k +")").test(format)) 
+		format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+
+	return format;
+
+};
 
 
 Article = Backbone.Model.extend({
@@ -61,7 +64,9 @@ ArticlesView = Backbone.View.extend({
 	},
 
 	render: function() {
+
 		console.log("articles view render");
+
 		if(myRoute.routes[Backbone.history.fragment] == "start"){
 			$(".adminButtons").html("");
 		}
@@ -73,6 +78,7 @@ ArticlesView = Backbone.View.extend({
 	}
 
 });
+
 
 ArticleView = Backbone.View.extend({
 	tagName: "div",
@@ -93,19 +99,15 @@ ArticleView = Backbone.View.extend({
 		if(nameWithoutSpace == "" || textWithoutSpace == ""){
 				alert("Fill in all fields");
 		}else{
-					var comment = this.model.get('comments').slice(0);
+			
+			var comment = this.model.get('comments').slice(0);
+			comment.push({name:myName, text:myText, timestamp:new Date().format("dd/MM h:mm") });
 
-					
-					comment.push({name:myName, text:myText, timestamp:new Date().format("dd/MM h:mm") });
-		
-		
-		this.model.set({sync: "sync"});//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
-		this.model.set({comments:comment});
-		$('#commentName').val("");
-		$('#commentText').val("");
+			this.model.set({sync: "sync"});//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
+			this.model.set({comments:comment});
+			$('#commentName').val("");
+			$('#commentText').val("");
 		}
-
-
 	},
 	initialize: function() {
 
@@ -129,6 +131,7 @@ ArticleView = Backbone.View.extend({
 	}
 
 });
+
 
 AddArticleView = Backbone.View.extend({
 	tagName: "div",
@@ -163,10 +166,7 @@ AddArticleView = Backbone.View.extend({
 		articles.add(article);
 		router.navigate('',{trigger:true});
 		}
-
-
 	}
-
 });
 
 
