@@ -5,10 +5,10 @@
 
 <html>
 	<head>
-		<meta charset="utf-8">
+		<meta charset="utf-8" />
 
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 
@@ -22,8 +22,8 @@
 		  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-		<meta name="description" content="A study in how a plausible news website might look like">
-		<meta name="author" content="J.o.R, F.G, B.M & F.D">
+		<meta name="description" content="A study in how a plausible news website might look like" />
+		<meta name="author" content="J.o.R, F.G, B.M & F.D" />
 		<!--link rel="shortcut icon" href="favicon.ico"-->
 
 		<title>JBFF News</title>
@@ -32,19 +32,15 @@
 
 	<body>
 
-		<script id="navbar-template-admin" type="text/x-handlebars-template">	
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
+		<script id="navbar-template-admin" type="text/x-handlebars-template">
+				<li><a href="#">Home</a></li>
 				<li><a href="#logOut">Logga ut</a></li>
 				<li><a href="#add-article">Add article +</a></li>
-			</ul>
 		</script>
 
 		<script id="navbar-template-notAdmin" type="text/x-handlebars-template">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">Home</a></li>
 				<li><a href="#login">Logga in</a></li>
-			</ul>
 		</script>
 
 		<!-- Fixed navbar -->
@@ -72,17 +68,17 @@
 
 				<div class="col-xs-6 col-xs-offset-2"> <!-- Articles view -->
 
-					<script id="login-template" type="text/x-handlebars-template">	
+					<script id="login-template" type="text/x-handlebars-template">
 						<h2>Logga in</h2>
 						<div class="input-group input-group-lg">
-							<input type="text" class="form-control" id="usernameInput" placeholder="Användarnamn">
-							<input type="password" class="form-control" id="passwordInput" placeholder="Lösenord">
+							<input type="text" class="form-control" id="usernameInput" placeholder="Användarnamn" />
+							<input type="password" class="form-control" id="passwordInput" placeholder="Lösenord" />
 						</div>
-						<p> <font color ="red" id="wrongLoginMessage"></font></p> 
+						<p> <font color ="red" id="wrongLoginMessage"></font></p>
 						<button class="btn btn-primary">Logga in</button>
 					</script>
 
-					<script id="articles" type="text/x-handlebars-template">	
+					<script id="articles" type="text/x-handlebars-template">
 						{{#each articles}}
 						<div class="page-header">
 							<h1><a href =#article/{{id}}>{{title}}</a></h1>
@@ -103,15 +99,15 @@
 
 						<h2>Kommentera</h2>
 
-						<input type=text id='commentName' class="form-control" placeholder="Name" ></input><br>
-						<textarea id='commentText' class="form-control" placeholder="Text" rows="4"></textarea><br>
+						<input type=text id='commentName' class="form-control" placeholder="Name" /><br />
+						<textarea id='commentText' class="form-control" placeholder="Text" rows="4"></textarea><br />
 						<button class="btn btn-success" id="sendMessage">Skicka</button>
 						<p> </p>
 
 						{{#each comments}}
 							<div class="panel panel-info">
 								<div class="panel-heading col-md-9">
-										<strong>{{this.name}} the master.</strong>  
+										<strong>{{this.name}}</strong>
 								</div>
 								<div class="panel-heading col-md-3">
 									{{this.timestamp}}
@@ -128,9 +124,9 @@
 
 
 
-					<script id="add-article" type="text/x-handlebars-template">	
+					<script id="add-article" type="text/x-handlebars-template">
 						<h2>Add article</h2>
-						<input type="text" class="form-control" id='title' placeholder="Title"></input><br />
+						<input type="text" class="form-control" id='title' placeholder="Title"><br />
 						<textarea id='introductionText' class="form-control" placeholder="Introduction text"></textarea><br />
 						<textarea id='text' class="form-control" placeholder="Text"></textarea><br />
 						<button class="btn btn-primary">Spara</button>
@@ -174,7 +170,11 @@
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
 		<script src="http://cdn.firebase.com/v0/firebase.js"></script>
 		<script src="http://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.min.js"></script>
+		<script src="js/jbff-tools.js"></script>
+		<script src="js/jbff-models.js"></script>
+		<script src="js/jbff-viewcontrols.js"></script>
+		<script src="js/jbff-routes.js"></script>
 		<script src="js/jbff.js"></script>
-		
+
 	</body>
 </html>

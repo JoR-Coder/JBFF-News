@@ -68,17 +68,17 @@ p {
 .navbar a{
   color: #0099FF;
   text-indent: 15px;
-
 }
+
 body a {
-  color: CC9966 ;
+  color: #CC9966;
 }
 
 #introText {
   font-family: inherit;
 }
 
-.navbar-nav li a:hover{
+#myNavbar a:hover{
   background-color: #5bc0de;
 }
 
