@@ -41,8 +41,11 @@ Article = Backbone.Model.extend({
 });
 
 
-Articles = Backbone.Firebase.Collection.extend({ model: Article,
-	firebase:'https://flickering-fire-2931.firebaseio.com/articles' });
+Admin = Backbone.Firebase.Model.extend({ firebase: 'https://flickering-fire-2931.firebaseio.com/admin' });
+
+Articles = Backbone.Firebase.Collection.extend({ model: Article, firebase:'https://flickering-fire-2931.firebaseio.com/articles' });
+
+
 
 // The views & controls
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -222,6 +225,7 @@ NavbarView = Backbone.View.extend({
 
 			this.$el.html("");
 			var notAdmin = Handlebars.compile($("#navbar-template-notAdmin").html());
+			console.log(notAdmin());
 			this.$el.html(notAdmin());
 		}
 	}
