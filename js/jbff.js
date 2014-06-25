@@ -1,29 +1,3 @@
-// Extra functions...
-//
-
-Date.prototype.format = function(format){ //author: meizz
-
-	var o = {
-		"M+" : this.getMonth()+1, //month
-		"d+" : this.getDate(),    //day
-		"h+" : this.getHours(),   //hour
-		"m+" : this.getMinutes(), //minute
-		"s+" : this.getSeconds(), //second
-		"q+" : Math.floor((this.getMonth()+3)/3),  //quarter
-		"S" : this.getMilliseconds() //millisecond
-	};
-
-	if(/(y+)/.test(format)) 
-		format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-	for(var k in o)
-		if(new RegExp("("+ k +")").test(format))
-			format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
-
-	return format;
-};
-
-
-
 // The models
 // == == == == == == == == == == == == == == == == == == == == == == == == ==
 
@@ -87,16 +61,12 @@ ArticlesView = Backbone.View.extend({
 	},
 
 	render: function() {
-<<<<<<< HEAD
 		console.log("articles view render");
 		if(myRoute.routes[Backbone.history.fragment] == "start"){
 			$(".adminButtons").html("");
 		}
 
 		
-=======
-		$(".editfield").html("");
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 		if( this.collection !== undefined ){
 			this.$el.html( this.template( {articles: this.collection.toJSON()} ) );
 		}
@@ -104,9 +74,7 @@ ArticlesView = Backbone.View.extend({
 
 });
 
-
 ArticleView = Backbone.View.extend({
-	el: $(".content"),
 	tagName: "div",
 //	className: "",
 
@@ -115,23 +83,16 @@ ArticleView = Backbone.View.extend({
 	events: {
 		"click button": "comment"
 	},
-	
 	comment:function(){
-
 		var myName = $('#commentName').val();
 		var myText = $('#commentText').val();
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 		var nameWithoutSpace = myName.replace(/\s/g, '');
 		var textWithoutSpace = myText.replace(/\s/g, '');
 
 		if(nameWithoutSpace == "" || textWithoutSpace == ""){
 				alert("Fill in all fields");
 		}else{
-<<<<<<< HEAD
 					var comment = this.model.get('comments').slice(0);
 
 					
@@ -145,20 +106,6 @@ ArticleView = Backbone.View.extend({
 		}
 
 
-=======
-
-			var comment = this.model.get('comments').slice(0);
-
-			comment.push({name:myName, text:myText, timestamp:new Date().format("dd/MM h:mm") });
-	
-			//DETTA SKRIVER VI BARA FÖR ATT SYNKA MED DATABASEN
-			this.model.set({sync: "sync"});
-			this.model.set({comments:comment});
-	
-			$('#commentName').val("");
-			$('#commentText').val("");
-		}		
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 	},
 	initialize: function() {
 
@@ -168,7 +115,6 @@ ArticleView = Backbone.View.extend({
 
 	render: function() {
 		if( this.model !== undefined ){
-<<<<<<< HEAD
 					console.log("article view render");
 
 			// Kod för att visa redigeringsknappar...
@@ -177,19 +123,12 @@ ArticleView = Backbone.View.extend({
 			var editField = Handlebars.compile( $("#edit-article").html());
 
 			$(".adminButtons").html( editField() );
-=======
-			
-			// Kod för att visa redigeringsknappar...
-			var editField = Handlebars.compile( $("#edit-article").html() );
-			$(".editfield").html( editField() );
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 
 			this.$el.html(this.template(this.model.toJSON()));
 		}
 	}
 
 });
-
 
 AddArticleView = Backbone.View.extend({
 	tagName: "div",
@@ -200,13 +139,8 @@ AddArticleView = Backbone.View.extend({
 	},
 
 	render: function() {
-<<<<<<< HEAD
 			this.$el.html(this.template());
 			$(".adminButtons").html("");
-=======
-		$(".editfield").html("");
-		this.$el.html(this.template());
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 	},
 	events: {
 		"click button":"save",
@@ -246,16 +180,17 @@ Router = Backbone.Router.extend({
 		'add-article':'add'
 	},
 	start:function(){
-<<<<<<< HEAD
 
-=======
->>>>>>> 21c17699b1844e34ad9b53ee2fb02af3a845e6b9
 		var articlesView = new ArticlesView({ collection: articles });
 		$(".content").html(articlesView.el);
 	},
 	view:function(id){
 		var article = articles.get(id);
+
 		var articleView = new ArticleView({model:article});
+
+		articleView.render();
+		$(".content").html(articleView.el);
 
 	},
 	add:function(){
