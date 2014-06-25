@@ -9,9 +9,9 @@
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
 		<link rel="stylesheet" href="css/jbff.css">
 
@@ -76,44 +76,61 @@
 
 			<div class="row">
 
-				<div class="col-md-2"> <!-- Left panel -->
-					<p class="lead articles">Okey! No Sidebar.</p>
-				</div> <!-- /Left panel -->
+				
 
 
 
-				<div class="col-md-10"> <!-- Right panel -->
-					<p class="lead">For now, let's handle the bars...</p>
+				<div class="col-xs-6 col-xs-offset-2"> <!-- middle view -->
 
 					<script id="articles" type="text/x-handlebars-template">	
 						{{#each articles}}
-						<h1><a href =#article/{{id}}>{{title}}</a></h1>
-							<p>{{text}}</p>
+						<div class="page-header">
+							<h1><a href =#article/{{id}}>{{title}}</a></h1>
+								<p>{{introductionText}}</p>
+						<font size="2"><i>{{datePublished}}</i></font>
+						</div>
 						{{/each}}
 					</script>
-					<script id="article" type="text/x-handlebars-template">		
+					<script id="article" type="text/x-handlebars-template">
+					<div class="page-header">
 						<h1>{{title}}</h1>
+						<strong><p>{{introductionText}}</p></strong>
 						<p>{{text}}</p>
+						<font size="2"><i>{{datePublished}}</i></font>
+						</div>				
+						
 						<h2>Kommentera</h2>
-							Namn:<input type=text id='commentName'></input><br>
-							<textarea id='commentText'></textarea>
-							<button>Spara</button>
+							<input type=text id='commentName' class="form-control" placeholder="Name" ></input><br>
+							<textarea id='commentText' class="form-control" placeholder="Text"></textarea><br>
+							<button class="btn btn-success">Skicka</button>
+							<p></p>
 						{{#each comments}}
-							<p>{{this.name}}</p>
-							<p>{{this.text}}</p>
-							<br>
+						<div class="panel panel-info">
+					<div class="panel-heading"><strong>{{this.name}}</strong><span class="pull-right">{{this.timestamp}}</span></div>
+								<div class="panel-body">
+									<p>{{this.text}}</p>
+								</div>
+							</div>
 						{{/each}}
 						
 					</script>
 
 					<script id="add-article" type="text/x-handlebars-template">	
-						Title:<input type=text id='title'></input><br>
-						<textarea id='text'></textarea>
-						<button>Spara</button>
+						<h2>Add article</h2>
+						<input type="text" class="form-control" id='title' placeholder="Title"></input><br>
+						<textarea id='introductionText' class="form-control" placeholder="Introduction text"></textarea><br>
+						<textarea id='text' class="form-control" placeholder="Text"></textarea><br>
+						<button class="btn btn-primary">Spara</button>
 					</script>
+
 					<div class="content"> </div>
-					
-				</div> <!-- /Right -->
+					</div><!-- /middle view -->
+					<script id="edit-article" type="text/x-handlebars-template">	
+					<button class="btn btn-primary">Redigera</button>
+					<p></p>
+					<button class="btn btn-danger">Ta bort</button>		
+				</script>
+				<div class="col-xs-2 adminButtons"></div>
 
 				<div class="clearfix"> </div>
 
