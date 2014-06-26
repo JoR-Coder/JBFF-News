@@ -129,7 +129,7 @@
 						<button class="btn btn-primary">Spara</button>
 					</script>
 
-					<script id="editArticle" type="text/x-handlebars-template">
+					<script id="edit-article" type="text/x-handlebars-template">
 						<h2>Redigera artikeln...</h2>
 						<input type="text" class="form-control" id='title' value="{{this.title}}"><br />
 						<textarea id='introductionText' class="form-control" placeholder="Introduction text">{{this.introductionText}}</textarea><br />
@@ -168,6 +168,7 @@
 
 		<!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
 
+		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<script src="http://underscorejs.org/underscore-min.js"></script>
@@ -181,6 +182,7 @@
 		<script src="js/jbff-viewcontrols.js"></script>
 		<script src="js/jbff-routes.js"></script>
 		<script src="js/jbff.js"></script>
+		<script> app.initialize(); </script>
 
 	</body>
 </html>

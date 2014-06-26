@@ -74,7 +74,6 @@ ArticleView = Backbone.View.extend({
 				$(".adminButtons").html( editField() );
 
 				$("#editArticle").on( "click", function(){
-					console.log( "Clicked: edit "+ id);
 					router.navigate( "#edit/"+id, {trigger:true} );
 				});
 				$("#deleteArticle").on( "click", function(){
@@ -130,7 +129,7 @@ AddArticleView = Backbone.View.extend({
 
 EditArticleView = Backbone.View.extend({
 	tagName: "div",
-	template: Handlebars.compile( $("#editArticle").html() ),
+	template: Handlebars.compile( $("#edit-article").html() ),
 	initialize: function() {
 
 		this.render();
