@@ -16,7 +16,7 @@ ArticlesView = Backbone.View.extend({
 
 	render: function() {
 
-		if(myRoute.routes[Backbone.history.fragment] == "start"){
+		if(router.routes[Backbone.history.fragment] == "start"){
 			$(".adminButtons").html("");
 		}
 
@@ -33,7 +33,7 @@ ArticleView = Backbone.View.extend({
 	template: Handlebars.compile( $("#article").html() ),
 	events: {
 
-		"click button": "comment"
+		"click #sendMessage"  : "comment",
 	},
 	initialize: function() {
 
@@ -67,11 +67,20 @@ ArticleView = Backbone.View.extend({
 	render: function() {
 		if( this.model !== undefined ){
 
-			if(admin.get("loggedIn") === 1){
-
-				var editField = Handlebars.compile( $("#edit-article").html());
+			if( user !== undefined ){
+				var id = this.model.get("id");
+				var editField = Handlebars.compile( $("#editButtons").html());
 
 				$(".adminButtons").html( editField() );
+
+				$("#editArticle").on( "click", function(){
+					console.log( "Clicked: edit "+ id);
+					router.navigate( "#edit/"+id, {trigger:true} );
+				});
+				$("#deleteArticle").on( "click", function(){
+					articles.remove( {id: id} );
+					router.navigate( "", {trigger:true} );
+				});
 			}
 
 			this.$el.html(this.template(this.model.toJSON()));
@@ -119,6 +128,51 @@ AddArticleView = Backbone.View.extend({
 });
 
 
+EditArticleView = Backbone.View.extend({
+	tagName: "div",
+	template: Handlebars.compile( $("#edit-article").html() ),
+	initialize: function() {
+
+		this.render();
+	},
+	events: {
+
+		"click button":"save",
+	},
+	save:function(){
+
+		var myText = $('#text').val();
+		var myTitle = $('#title').val();
+		var myIntroductionText = $('#introductionText').val();
+
+		var introWithoutSpace = myIntroductionText.replace(/\s/g, '');
+		var titleWithoutSpace = myTitle.replace(/\s/g, '');
+		var textWithoutSpace = myText.replace(/\s/g, '');
+
+		if(titleWithoutSpace == "" || textWithoutSpace == "" || introWithoutSpace == ""){
+				alert("Fill in all fields");
+		}else{
+
+		this.model.set({ title:myTitle,text:myText,introductionText:myIntroductionText,datePublished:new Date().format("dd/MM h:mm") });
+
+		router.navigate('',{trigger:true});
+		}
+	},
+	render: function() {
+
+			this.$el.html(this.template());
+			$(".adminButtons").html("");
+
+			console.log(  $("#text").val() );
+
+			$('#title').val( this.model.get("title") );
+			$('#introductionText').text( this.model.get("introductionText") );
+			$('#text').text( this.model.get("text") );
+	}
+});
+
+
+
 LoginView = Backbone.View.extend({
 	tagName: "div",
 	template: Handlebars.compile($("#login-template").html()),
@@ -130,7 +184,7 @@ LoginView = Backbone.View.extend({
 	render: function() {
 
 		this.$el.html(this.template());
-			$("#wrongLoginMessage").html("");
+		$("#wrongLoginMessage").html("");
 	},
 	events: {
 		"click button":"login",
@@ -140,14 +194,11 @@ LoginView = Backbone.View.extend({
 		var username = $('#usernameInput').val();
 		var password = $('#passwordInput').val();
 
-		if(username === admin.get("name") && password === admin.get("password")){
-
-			admin.set({loggedIn:1});
-			router.navigate('',{trigger:true});
-		}else{
-
-			$("#wrongLoginMessage").html("Fel uppgifter, försök igen!");
-		}
+		auth.login('password', {
+			email: username,
+			password: password,
+			rememberMe: true
+		});
 	}
 });
 
@@ -157,21 +208,17 @@ NavbarView = Backbone.View.extend({
 	className: "nav navbar-nav",
 	template: Handlebars.compile($("#navbar-template-admin").html()),
 	initialize: function() {
-
 		this.render();
 	},
 
 	render: function() {
 
-		if(admin.get("loggedIn") === 1){
-
+		if( user !== undefined ){
 			this.$el.html("");
-			this.$el.html(this.template());
-		}else{
-
+			this.$el.html( this.template() );
+		} else {
 			this.$el.html("");
 			var notAdmin = Handlebars.compile($("#navbar-template-notAdmin").html());
-			console.log(notAdmin());
 			this.$el.html(notAdmin());
 		}
 	}

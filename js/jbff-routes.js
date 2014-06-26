@@ -10,6 +10,7 @@ Router = Backbone.Router.extend({
 		'':'start',
 		'article/:id': 'view',
 		'add-article': 'add',
+		'edit/:id'   : 'edit',
 		'login'      : 'login',
 		'logOut'     : 'logOut'
 	},
@@ -17,9 +18,6 @@ Router = Backbone.Router.extend({
 
 		var navbarView = new NavbarView();
 		var articlesView = new ArticlesView({ collection: articles });
-
-		articlesView.render();
-		navbarView.render();
 
 		$("#myNavbar").html(navbarView.el);
 		$(".content").html(articlesView.el);
@@ -29,25 +27,27 @@ Router = Backbone.Router.extend({
 		var article = articles.get(id);
 		var articleView = new ArticleView({model:article});
 
-		articleView.render();
 		$(".content").html(articleView.el);
 	},
 	add:function(){
 
 		var addArticleView = new AddArticleView();
 
-		addArticleView.render();
 		$(".content").html(addArticleView.el);
+	},
+	edit:function(id){
+		var article = articles.get(id);
+		var editArticleView = new EditArticleView({model:article});
+
+		$(".content").html(editArticleView.el);
 	},
 	login:function(){
 		var loginView = new LoginView();
 
-		loginView.render();
 		$(".content").html(loginView.el);
 	},
 	logOut:function(){
-		admin.set({loggedIn:0});
-		router.navigate('',{trigger:true});
+		auth.logout();
 	}
 });
 
