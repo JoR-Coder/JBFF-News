@@ -130,7 +130,7 @@ AddArticleView = Backbone.View.extend({
 
 EditArticleView = Backbone.View.extend({
 	tagName: "div",
-	template: Handlebars.compile( $("#edit-article").html() ),
+	template: Handlebars.compile( $("#editArticle").html() ),
 	initialize: function() {
 
 		this.render();
@@ -159,15 +159,8 @@ EditArticleView = Backbone.View.extend({
 		}
 	},
 	render: function() {
-
-			this.$el.html(this.template());
+			this.$el.html(this.template(this.model.toJSON()));
 			$(".adminButtons").html("");
-
-			console.log(  $("#text").val() );
-
-			$('#title').val( this.model.get("title") );
-			$('#introductionText').text( this.model.get("introductionText") );
-			$('#text').text( this.model.get("text") );
 	}
 });
 

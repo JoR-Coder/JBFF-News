@@ -129,11 +129,11 @@
 						<button class="btn btn-primary">Spara</button>
 					</script>
 
-					<script id="edit-article" type="text/x-handlebars-template">
+					<script id="editArticle" type="text/x-handlebars-template">
 						<h2>Redigera artikeln...</h2>
-						<input type="text" class="form-control" id='title' placeholder="Title"><br />
-						<textarea id='introductionText' class="form-control" placeholder="Introduction text"></textarea><br />
-						<textarea id='text' class="form-control" placeholder="Text"> barg </textarea><br />
+						<input type="text" class="form-control" id='title' value="{{this.title}}"><br />
+						<textarea id='introductionText' class="form-control" placeholder="Introduction text">{{this.introductionText}}</textarea><br />
+						<textarea id='text' class="form-control" placeholder="Text">{{this.text}}</textarea><br />
 						<button class="btn btn-primary">Spara</button>
 					</script>
 
