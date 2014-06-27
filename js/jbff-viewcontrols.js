@@ -115,7 +115,7 @@ AddArticleView = Backbone.View.extend({
 
 		var article = new Article({title:myTitle,text:myText,introductionText:myIntroductionText,datePublished:new Date().format("dd/MM h:mm")});
 
-		articles.add(article);
+		articles.unshift(article);
 		router.navigate('',{trigger:true});
 		}
 	},

@@ -6,7 +6,7 @@
 
 
 
-var userRef = new Firebase('https://flickering-fire-2931.firebaseio.com/admin');
+var userRef = new Firebase('https://flickering-fire-2931.firebaseio.com');
 var user, articles, router;
 
 // Simple login callback.
